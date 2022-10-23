@@ -1,6 +1,6 @@
 {
   "name": "monsters-rolodex",
-  + "homepage": "https://emines0.github.io/monsters-rolodexs",
+  "homepage": "https://emines0.github.io/monsters-rolodexs",
   "version": "0.1.0",
   "private": false,
   "dependencies": {
