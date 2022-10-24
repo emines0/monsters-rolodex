@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import CardList from './components/card-list/card-list.component';
+import SearchBox from './components/search-box/search-box.component';
 
 class App extends Component {
   constructor() {
@@ -20,30 +22,39 @@ class App extends Component {
       ));
   }
 
-  render() {
+  onSearchChange = (event) => {
+    const searchField = event.target.value.toLocaleLowerCase();
+      this.setState(() => {
+        return {searchField}; //on change changing the state seearchField with value from search-box
+      });
+  }
 
-    const filteredMonsters = this.state.monsters.filter((monster) => {
-      return monster.name.toLocaleLowerCase().includes(this.state.searchField);  //filtering of lowercase monster with lowercase searchfield state
+  render() {
+    const {monsters, searchField} = this.state
+    const {onSearchChange} = this;
+
+    const filteredMonsters = monsters.filter((monster) => {
+      return monster.name.toLocaleLowerCase().includes(searchField);  //filtering of lowercase monster with lowercase searchfield state
     });
 
     return (
       <div className="App">
-        <input 
-        className="search-box" 
-        type="search" 
-        placeholder="search monster" 
-        onChange={(event) => {
-          const searchField = event.target.value.toLocaleLowerCase();
-            this.setState(() => {
-              return {searchField}; //on change changing the state seearchField with value from search-box
-            })
-        }}/>
-
+        
         {
-          filteredMonsters.map((monster, id) => { //return based on search-box
-            return <h1 key={id}>{monster.name}</h1>
-          })
+          // this.filteredMonsters.map((monster, id) => { //return based on search-box
+          //   return <h1 key={id}>{monster.name}</h1>
+          // })
         }
+        <SearchBox 
+          className='monster-search-box' 
+          onSearchChangeHandler={onSearchChange} 
+          placeholder = 'search monsters' 
+        />
+
+        <CardList 
+          monsters={filteredMonsters}
+        />
+        
       </div>
     );
   }
