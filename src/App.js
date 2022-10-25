@@ -40,11 +40,8 @@ class App extends Component {
     return (
       <div className="App">
         
-        {
-          // this.filteredMonsters.map((monster, id) => { //return based on search-box
-          //   return <h1 key={id}>{monster.name}</h1>
-          // })
-        }
+        <h1 className="app-title">Monsters Rolodex</h1>
+
         <SearchBox 
           className='monster-search-box' 
           onSearchChangeHandler={onSearchChange} 
