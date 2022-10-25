@@ -1,41 +1,39 @@
-import { Component } from 'react';
-import logo from './logo.svg';
+import { useState, useEffect } from 'react';
 import './App.css';
 import CardList from './components/card-list/card-list.component';
 import SearchBox from './components/search-box/search-box.component';
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-        monsters: [],
-        searchField: ''
-    }
-  }
+const App = () =>{
 
-  componentDidMount(){
-    fetch('https://jsonplaceholder.typicode.com/users')
+    const [searchField, setSerchField] = useState('');
+    const [monsters, setMonsters] = useState([]);
+    const [filteredMonsters, setFilteredMonsters] = useState(monsters);
+
+    useEffect(() => {
+
+      fetch('https://jsonplaceholder.typicode.com/users')
       .then(response => response.json())
-      .then((users) => this.setState(() => {
-        return {monsters: users}
-      }
-      ));
-  }
+      .then((users) => setMonsters(users));
 
-  onSearchChange = (event) => {
-    const searchField = event.target.value.toLocaleLowerCase();
-      this.setState(() => {
-        return {searchField}; //on change changing the state seearchField with value from search-box
+    }, []);
+
+    // Run filtering of monsters only if monsters array changed or searchfield change
+    useEffect(() => {
+
+      const newFilteredMonsters = monsters.filter((monster) => {
+        return monster.name.toLocaleLowerCase().includes(searchField);  //filtering of lowercase monster with lowercase searchfield state
       });
-  }
 
-  render() {
-    const {monsters, searchField} = this.state
-    const {onSearchChange} = this;
+      setFilteredMonsters(newFilteredMonsters);
+    
+    }, [monsters, searchField]);
+    
+    const onSearchChange = (event) => {
+      const searchFieldString = event.target.value.toLocaleLowerCase();
+        setSerchField(searchFieldString); //on change changing the state seearchField with value from search-box
+    };
 
-    const filteredMonsters = monsters.filter((monster) => {
-      return monster.name.toLocaleLowerCase().includes(searchField);  //filtering of lowercase monster with lowercase searchfield state
-    });
+
 
     return (
       <div className="App">
@@ -51,10 +49,9 @@ class App extends Component {
         <CardList 
           monsters={filteredMonsters}
         />
-        
+
       </div>
     );
   }
-}
 
 export default App;
